@@ -20,6 +20,7 @@ export default function Index() {
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState({ done: 0, total: 0 });
   const [zipBlob, setZipBlob] = useState<Blob | null>(null);
+  const [singleBlob, setSingleBlob] = useState<{ blob: Blob; name: string } | null>(null);
   const [watermarkSrc, setWatermarkSrc] = useState<string | null>(null);
   const [watermarkName, setWatermarkName] = useState<string>("");
   const wmInputRef = useRef<HTMLInputElement>(null);
@@ -27,16 +28,19 @@ export default function Index() {
   const addFiles = useCallback((newFiles: File[]) => {
     setFiles((prev) => [...prev, ...newFiles]);
     setZipBlob(null);
+    setSingleBlob(null);
   }, []);
 
   const removeFile = useCallback((idx: number) => {
     setFiles((prev) => prev.filter((_, i) => i !== idx));
     setZipBlob(null);
+    setSingleBlob(null);
   }, []);
 
   const clearAll = useCallback(() => {
     setFiles([]);
     setZipBlob(null);
+    setSingleBlob(null);
   }, []);
 
   const handleWatermarkUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +63,7 @@ export default function Index() {
     setWatermarkSrc(null);
     setWatermarkName("");
     setZipBlob(null);
+    setSingleBlob(null);
   }, [watermarkSrc]);
 
   useEffect(() => {
@@ -72,20 +77,26 @@ export default function Index() {
     setProcessing(true);
     setProgress({ done: 0, total: files.length });
     setZipBlob(null);
-
-    const zip = new JSZip();
+    setSingleBlob(null);
 
     try {
-      for (let i = 0; i < files.length; i++) {
-        const blob = await applyWatermark(files[i], watermarkSrc, position, sizeRatio, opacity);
-        zip.file(getOutputFilename(files[i].name), blob);
-        setProgress({ done: i + 1, total: files.length });
-        await new Promise((r) => setTimeout(r, 0));
+      if (files.length === 1) {
+        const blob = await applyWatermark(files[0], watermarkSrc, position, sizeRatio, opacity);
+        setSingleBlob({ blob, name: getOutputFilename(files[0].name) });
+        setProgress({ done: 1, total: 1 });
+        toast({ title: "Concluído!", description: "Imagem processada com sucesso." });
+      } else {
+        const zip = new JSZip();
+        for (let i = 0; i < files.length; i++) {
+          const blob = await applyWatermark(files[i], watermarkSrc, position, sizeRatio, opacity);
+          zip.file(getOutputFilename(files[i].name), blob);
+          setProgress({ done: i + 1, total: files.length });
+          await new Promise((r) => setTimeout(r, 0));
+        }
+        const content = await zip.generateAsync({ type: "blob" });
+        setZipBlob(content);
+        toast({ title: "Concluído!", description: `${files.length} imagens processadas com sucesso.` });
       }
-
-      const content = await zip.generateAsync({ type: "blob" });
-      setZipBlob(content);
-      toast({ title: "Concluído!", description: `${files.length} imagens processadas com sucesso.` });
     } catch (err: any) {
       toast({ title: "Erro", description: err.message || "Falha ao processar imagens.", variant: "destructive" });
     } finally {
@@ -267,6 +278,11 @@ export default function Index() {
                 {zipBlob && (
                   <Button variant="secondary" onClick={handleDownload}>
                     <Download className="h-4 w-4 mr-1" /> Baixar ZIP
+                  </Button>
+                )}
+                {singleBlob && (
+                  <Button variant="secondary" onClick={() => saveAs(singleBlob.blob, singleBlob.name)}>
+                    <Download className="h-4 w-4 mr-1" /> Baixar Imagem
                   </Button>
                 )}
               </div>
