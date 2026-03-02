@@ -209,7 +209,7 @@ export default function Index() {
             </h2>
             <div className="flex flex-col gap-6 md:flex-row md:items-start">
               <div className="flex flex-col gap-5">
-                <PositionSelector value={position} onChange={setPosition} />
+                <PositionSelector value={position} onChange={(v) => { setPosition(v); setZipBlob(null); setSingleBlob(null); }} />
                 <div className="space-y-4 w-[200px]">
                   <div className="space-y-2">
                     <label className="text-sm text-muted-foreground">
@@ -217,7 +217,7 @@ export default function Index() {
                     </label>
                     <Slider
                       value={[sizeRatio]}
-                      onValueChange={([v]) => { setSizeRatio(v); setZipBlob(null); }}
+                      onValueChange={([v]) => { setSizeRatio(v); setZipBlob(null); setSingleBlob(null); }}
                       min={0.05}
                       max={0.5}
                       step={0.01}
@@ -229,7 +229,7 @@ export default function Index() {
                     </label>
                     <Slider
                       value={[opacity]}
-                      onValueChange={([v]) => { setOpacity(v); setZipBlob(null); }}
+                      onValueChange={([v]) => { setOpacity(v); setZipBlob(null); setSingleBlob(null); }}
                       min={0.05}
                       max={1}
                       step={0.01}
