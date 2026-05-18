@@ -1,53 +1,53 @@
-# Welcome
+# MDADP
 
-## Project info
+Web tool for adding watermarks to images. Upload one or multiple images, customize position, opacity, text or logo, and download as ZIP.
 
-**URL**: mdadp.vercel.app
+## Features
 
-## How can I edit this code?
+- Image upload, single or multiple (drag & drop)
+- Real-time preview
+- Text or image watermark
+- Customizable positioning (9 positions)
+- Adjustable opacity
+- Download single or ZIP
+- Responsive
 
-There are several ways of editing your application.
+## How it Works
 
-**Use your preferred IDE**
+1. **Upload** — Drag & drop or select one or multiple images
+2. **Configure** — Choose watermark type (text or image), position, and opacity
+3. **Preview** — See changes in real-time on all images
+4. **Download** — Get individual images or all at once as ZIP
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Preview
 
-Follow these steps:
+**Live:** [mdadp.vercel.app](https://mdadp.vercel.app)
+
+## Stack
+
+- Vite + React + TypeScript
+- Tailwind CSS + shadcn/ui
+- Radix UI primitives
+- JSZip (batch download)
+
+## Getting Started
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+git clone https://github.com/jonvieira/mdadp
+cd mdadp
+npm install
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Scripts
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start dev server |
+| `npm run build` | Build for production |
+| `npm run lint` | Run linter |
+| `npm run test` | Run tests |
 
-**Use GitHub Codespaces**
+## Deploy
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Automatic deployment via Vercel on pushes to `main`.
